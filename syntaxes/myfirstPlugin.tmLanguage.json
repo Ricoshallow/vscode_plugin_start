@@ -1,0 +1,626 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "myfirstPlugin",
+	"scopeName": "source.myfirstPlugin",
+	"fileTypes": [
+		"dos",
+		"dp",
+		"txt"
+	],
+	"patterns": [
+		{
+			"match": "\\.\\.\\.",
+			"name": "invalid.ellipsis.myfirstPlugin"
+		},
+		{
+			"include": "#keywords"
+		},
+		{
+			"include": "#literals"
+		},
+		{
+			"include": "#comment"
+		},
+		{
+			"include": "#variable"
+		},
+		{
+			"include": "#operators"
+		},
+		{
+			"include": "#method_calls"
+		},
+		{
+			"include": "#function_calls"
+		},
+		{
+			"include": "#properties"
+		},
+		{
+			"match": "(?<=^|\\s|\\s\\*\\s)@testing",
+			"name": "storage.type.annotation.myfirstPlugin"
+		},
+		{
+			"match": ";",
+			"name": "punctuation.terminator.statement.myfirstPlugin"
+		},
+		{
+			"match": ",",
+			"name": "punctuation.separator.commma.myfirstPlugin"
+		}
+	],
+	"repository": {
+		"keywords": {
+			"patterns": [
+				{
+					"match": "\\b(?<![\\.\\$])(as|asc|assert|break|by|catch|context|const|continue|def|delete|desc|do|else|exec|for|form|from|group|having|if|in|insert|into|mapr|module|mutable|null|order|pivot|return|select|set|share|throw|timer|top|try|update|use|where|while|(?<=for)\\s+own)(?!\\s*:)\\b",
+					"name": "keyword.control.myfirstPlugin"
+				}
+			]
+		},
+		"literals": {
+			"patterns": [
+				{
+					"include": "#constLiterals"
+				},
+				{
+					"include": "#DateLiterals"
+				},
+				{
+					"include": "#stringLiterals"
+				},
+				{
+					"include": "#numberLiterals"
+				}
+			]
+		},
+		"constLiterals": {
+			"patterns": [
+				{
+					"match": "\\b(true|false|NULL|VAR|GLOBAL|DEF|HEAD|CURRENT|TAIL|LINE|PIE|COLUMN|BAR|AREA|HISTOGRAM|SCATTER|SCALAR|PAIR|VECTOR|MATRIX|SET|DICT|TABLE|VOID|BOOL|CHAR|SHORT|OBJECT|DICTIONARY|INT|INDEX|LONG|DATE|MONTH|TIME|MINUTE|FUNCTIONDEF|STRING|SYMBOL|DOUBLE|FLOAT|TIMESTAMP|DATETIME|ANY|HANDLE|SHARED|NANOTIME|NANOTIMESTAMP|SECOND|TABLE_READ|TABLE_WRITE|DBOBJ_CREATE|DBOBJ_DELETE|DB_MANAGE|VIEW_EXEC|SCRIPT_EXEC|TEST_EXEC|HASH|HASH_PTN|COMPO)\\b",
+					"name": "constant.language.int.myfirstPlugin"
+				}
+			]
+		},
+		"DateLiterals": {
+			"patterns": [
+				{
+					"match": "\\b[0-9]{4}[.][0-9]{2}([M]|[.][0-9]{2})\\b",
+					"name": "constant.language.month.myfirstPlugin"
+				},
+				{
+					"match": "\\b[0-9]{4}[.][0-9]{2}[.][0-9]{2}[T ][0-9]{2}:[0-9]{2}:[0-9]{2}([.][0-9]{3,9})?\\b",
+					"name": "constant.language.dateTime.myfirstPlugin"
+				},
+				{
+					"match": "\\b[0-9]{2}:[0-9]{2}:[0-9]{2}([.][0-9]{3,9})?\\b",
+					"name": "constant.language.time.myfirstPlugin"
+				},
+				{
+					"match": "\\b[0-9]{2}:[0-9]{2}m\\b",
+					"name": "constant.language.minute.myfirstPlugin"
+				}
+			]
+		},
+		"stringLiterals": {
+			"patterns": [
+				{
+					"include": "#single_quoted_string"
+				},
+				{
+					"include": "#double_quoted_string"
+				},
+				{
+					"begin": "'''",
+					"beginCaptures": {
+						"0": {
+							"name": "punctuation.definition.string.begin.myfirstPlugin"
+						}
+					},
+					"end": "'''",
+					"endCaptures": {
+						"0": {
+							"name": "punctuation.definition.string.end.myfirstPlugin"
+						}
+					},
+					"name": "string.quoted.single.heredoc.myfirstPlugin",
+					"patterns": [
+						{
+							"captures": {
+								"1": {
+									"name": "punctuation.definition.escape.backslash.myfirstPlugin"
+								}
+							},
+							"match": "(\\\\).",
+							"name": "constant.character.escape.backslash.myfirstPlugin"
+						}
+					]
+				},
+				{
+					"begin": "\"\"\"",
+					"beginCaptures": {
+						"0": {
+							"name": "punctuation.definition.string.begin.myfirstPlugin"
+						}
+					},
+					"end": "\"\"\"",
+					"endCaptures": {
+						"0": {
+							"name": "punctuation.definition.string.end.myfirstPlugin"
+						}
+					},
+					"name": "string.quoted.double.heredoc.myfirstPlugin",
+					"patterns": [
+						{
+							"captures": {
+								"1": {
+									"name": "punctuation.definition.escape.backslash.myfirstPlugin"
+								}
+							},
+							"match": "(\\\\).",
+							"name": "constant.character.escape.backslash.myfirstPlugin"
+						},
+						{
+							"include": "#interpolated_myfirstPlugin"
+						}
+					]
+				},
+				{
+					"match": "`[\\w@]+",
+					"name": "string.quoted.other.myfirstPlugin"
+				},
+				{
+					"match": "(`)(.*)(`)",
+					"name": "string.quoted.script.myfirstPlugin",
+					"captures": {
+						"1": {
+							"name": "punctuation.definition.string.begin.myfirstPlugin"
+						},
+						"2": {
+							"name": "source.js.embedded.myfirstPlugin",
+							"patterns": [
+								{
+									"include": "source.js"
+								}
+							]
+						},
+						"3": {
+							"name": "punctuation.definition.string.end.myfirstPlugin"
+						}
+					}
+				}
+			]
+		},
+		"single_quoted_string": {
+			"patterns": [
+				{
+					"begin": "'",
+					"beginCaptures": {
+						"0": {
+							"name": "punctuation.definition.string.begin.myfirstPlugin"
+						}
+					},
+					"end": "'",
+					"endCaptures": {
+						"0": {
+							"name": "punctuation.definition.string.end.myfirstPlugin"
+						}
+					},
+					"name": "string.quoted.single.myfirstPlugin",
+					"patterns": [
+						{
+							"captures": {
+								"1": {
+									"name": "punctuation.definition.escape.backslash.myfirstPlugin"
+								}
+							},
+							"match": "(\\\\)(x[0-9A-Fa-f]{2}|[0-2][0-7]{0,2}|3[0-6][0-7]?|37[0-7]?|[4-7][0-7]?|.)",
+							"name": "constant.character.escape.backslash.myfirstPlugin"
+						}
+					]
+				}
+			]
+		},
+		"double_quoted_string": {
+			"patterns": [
+				{
+					"begin": "\"",
+					"beginCaptures": {
+						"0": {
+							"name": "punctuation.definition.string.begin.myfirstPlugin"
+						}
+					},
+					"end": "\"",
+					"endCaptures": {
+						"0": {
+							"name": "punctuation.definition.string.end.myfirstPlugin"
+						}
+					},
+					"name": "string.quoted.double.myfirstPlugin",
+					"patterns": [
+						{
+							"captures": {
+								"1": {
+									"name": "punctuation.definition.escape.backslash.myfirstPlugin"
+								}
+							},
+							"match": "(\\\\)(x[0-9A-Fa-f]{2}|[0-2][0-7]{0,2}|3[0-6][0-7]|37[0-7]?|[4-7][0-7]?|.)",
+							"name": "constant.character.escape.backslash.myfirstPlugin"
+						},
+						{
+							"include": "#interpolated_myfirstPlugin"
+						}
+					]
+				}
+			]
+		},
+		"numberLiterals": {
+			"patterns": [
+				{
+					"match": "\\b0(x|X)[0-9a-fA-F]+\\b",
+					"name": "constant.numeric.hex.myfirstPlugin"
+				},
+				{
+					"match": "\\b0(b|B)[01]+\\b",
+					"name": "constant.numeric.binary.myfirstPlugin"
+				},
+				{
+					"match": "\\b0(o|O)?[0-7]+\\b",
+					"name": "constant.numeric.octal.myfirstPlugin"
+				},
+				{
+					"match": "(?x)\n(?:\n  (?:\\b[0-9]+(\\.)[0-9]+[eE][+-]?[0-9]+\\b)| # 1.1E+3\n  (?:\\b[0-9]+(\\.)[eE][+-]?[0-9]+\\b)|       # 1.E+3\n  (?:\\B(\\.)[0-9]+[eE][+-]?[0-9]+\\b)|       # .1E+3\n  (?:\\b[0-9]+[eE][+-]?[0-9]+\\b)|            # 1E+3\n  (?:\\b[0-9]+(\\.)[0-9]+\\b)|                # 1.1\n  (?:\\b[0-9]+(?=\\.{2,3}))|                  # 1 followed by a slice\n  (?:\\b[0-9]+(\\.)\\B)|                      # 1.\n  (?:\\B(\\.)[0-9]+\\b)|                      # .1\n  (?:\\b[0-9]+\\b(?!\\.))                     # 1\n)",
+					"captures": {
+						"0": {
+							"name": "constant.numeric.decimal.myfirstPlugin"
+						},
+						"1": {
+							"name": "punctuation.separator.decimal.period.myfirstPlugin"
+						},
+						"2": {
+							"name": "punctuation.separator.decimal.period.myfirstPlugin"
+						},
+						"3": {
+							"name": "punctuation.separator.decimal.period.myfirstPlugin"
+						},
+						"4": {
+							"name": "punctuation.separator.decimal.period.myfirstPlugin"
+						},
+						"5": {
+							"name": "punctuation.separator.decimal.period.myfirstPlugin"
+						},
+						"6": {
+							"name": "punctuation.separator.decimal.period.myfirstPlugin"
+						}
+					}
+				}
+			]
+		},
+		"function_calls": {
+			"patterns": [
+				{
+					"begin": "(@)?([\\w$]+)[!]?(?=\\()",
+					"beginCaptures": {
+						"1": {
+							"name": "variable.other.readwrite.instance.myfirstPlugin"
+						},
+						"2": {
+							"patterns": [
+								{
+									"include": "#function_names"
+								}
+							]
+						}
+					},
+					"end": "(?<=\\))",
+					"name": "meta.function-call.myfirstPlugin",
+					"patterns": [
+						{
+							"include": "#arguments"
+						}
+					]
+				}
+			]
+		},
+		"function_names": {
+			"patterns": [
+				{
+					"match": "[a-zA-Z_$][\\w$]*",
+					"name": "entity.name.function.myfirstPlugin"
+				},
+				{
+					"match": "\\d[\\w$]*",
+					"name": "invalid.illegal.identifier.myfirstPlugin"
+				}
+			]
+		},
+		"function_params": {
+			"patterns": [
+				{
+					"begin": "\\(",
+					"beginCaptures": {
+						"0": {
+							"name": "punctuation.definition.parameters.begin.bracket.round.myfirstPlugin"
+						}
+					},
+					"end": "\\)",
+					"endCaptures": {
+						"0": {
+							"name": "punctuation.definition.parameters.end.bracket.round.myfirstPlugin"
+						}
+					},
+					"name": "meta.parameters.myfirstPlugin",
+					"patterns": [
+						{
+							"include": "#variable"
+						},
+						{
+							"match": "(@(?:[a-zA-Z_$][\\w$]*)?)(\\.\\.\\.)?",
+							"captures": {
+								"1": {
+									"name": "variable.parameter.function.readwrite.instance.myfirstPlugin"
+								},
+								"2": {
+									"name": "keyword.operator.splat.myfirstPlugin"
+								}
+							}
+						},
+						{
+							"include": "$self"
+						}
+					]
+				}
+			]
+		},
+		"comment": {
+			"patterns": [
+				{
+					"begin": "/\\*",
+					"beginCaptures": {
+						"0": {
+							"name": "punctuation.definition.comment.myfirstPlugin"
+						}
+					},
+					"end": "\\*/",
+					"endCaptures": {
+						"0": {
+							"name": "punctuation.definition.comment.myfirstPlugin"
+						}
+					},
+					"name": "comment.block.myfirstPlugin",
+					"patterns": [
+						{
+							"match": "(?<=^|\\s|\\s\\*\\s)@\\w*(?=\\s)",
+							"name": "storage.type.annotation.myfirstPlugin"
+						}
+					]
+				},
+				{
+					"begin": "//",
+					"beginCaptures": {
+						"0": {
+							"name": "punctuation.definition.comment.myfirstPlugin"
+						}
+					},
+					"end": "$",
+					"name": "comment.line.number-sign.myfirstPlugin"
+				}
+			]
+		},
+		"arguments": {
+			"patterns": [
+				{
+					"begin": "\\(",
+					"beginCaptures": {
+						"0": {
+							"name": "punctuation.definition.arguments.begin.bracket.round.myfirstPlugin"
+						}
+					},
+					"end": "\\)",
+					"endCaptures": {
+						"0": {
+							"name": "punctuation.definition.arguments.end.bracket.round.myfirstPlugin"
+						}
+					},
+					"name": "meta.arguments.myfirstPlugin",
+					"patterns": [
+						{
+							"include": "$self"
+						},
+						{
+							"include": "#literals"
+						},
+						{
+							"include": "#variable"
+						}
+					]
+				}
+			]
+		},
+		"variable": {
+			"patterns": [
+				{
+					"match": "(@)([a-zA-Z_\\$]\\w*)?",
+					"name": "variable.other.readwrite.instance.myfirstPlugin"
+				}
+			]
+		},
+		"interpolated_myfirstPlugin": {
+			"patterns": [
+				{
+					"begin": "\\#\\{",
+					"captures": {
+						"0": {
+							"name": "punctuation.section.embedded.myfirstPlugin"
+						}
+					},
+					"end": "\\}",
+					"name": "source.myfirstPlugin.embedded.source",
+					"patterns": [
+						{
+							"include": "$self"
+						}
+					]
+				}
+			]
+		},
+		"method_calls": {
+			"patterns": [
+				{
+					"begin": "(?:(\\.)|(::))\\s*([\\w$]+)\\s*(?=\\()",
+					"beginCaptures": {
+						"1": {
+							"name": "punctuation.separator.method.period.myfirstPlugin"
+						},
+						"2": {
+							"name": "keyword.operator.prototype.myfirstPlugin"
+						},
+						"3": {
+							"patterns": [
+								{
+									"include": "#method_names"
+								}
+							]
+						}
+					},
+					"end": "(?<=\\))",
+					"name": "meta.method-call.myfirstPlugin",
+					"patterns": [
+						{
+							"include": "#arguments"
+						}
+					]
+				}
+			]
+		},
+		"method_names": {
+			"patterns": [
+				{
+					"match": "[a-zA-Z_$][\\w$]*",
+					"name": "entity.name.function.myfirstPlugin"
+				},
+				{
+					"match": "\\d[\\w$]*",
+					"name": "invalid.illegal.identifier.myfirstPlugin"
+				}
+			]
+		},
+		"operators": {
+			"patterns": [
+				{
+					"match": "<<|>>",
+					"name": "keyword.operator.bitwise.shift.myfirstPlugin"
+				},
+				{
+					"match": "!=|<=|>=|==",
+					"name": "keyword.operator.comparison.myfirstPlugin"
+				},
+				{
+					"match": "&&|!|\\|\\|",
+					"name": "keyword.operator.logical.myfirstPlugin"
+				},
+				{
+					"match": "&|\\||\\^",
+					"name": "keyword.operator.bitwise.myfirstPlugin"
+				},
+				{
+					"match": "\\.\\.",
+					"name": "keyword.operator.splat.myfirstPlugin"
+				},
+				{
+					"match": "\\?",
+					"name": "keyword.operator.existential.myfirstPlugin"
+				},
+				{
+					"match": "/|<-|%|\\*|/|-|\\$|\\+",
+					"name": "keyword.operator.myfirstPlugin"
+				},
+				{
+					"match": "([a-zA-Z$_][\\w$]*)?\\s*(=|:(?!:))(?![>=])",
+					"captures": {
+						"1": {
+							"name": "variable.assignment.myfirstPlugin"
+						},
+						"2": {
+							"name": "keyword.operator.assignment.myfirstPlugin"
+						}
+					}
+				}
+			]
+		},
+		"properties": {
+			"patterns": [
+				{
+					"match": "(?:(\\.)|(::))\\s*([A-Z][A-Z0-9_$]*\\b\\$*)(?=\\s*\\??(\\.\\s*[a-zA-Z_$]\\w*|::))",
+					"captures": {
+						"1": {
+							"name": "punctuation.separator.property.period.myfirstPlugin"
+						},
+						"2": {
+							"name": "keyword.operator.prototype.myfirstPlugin"
+						},
+						"3": {
+							"name": "constant.other.object.property.myfirstPlugin"
+						}
+					}
+				},
+				{
+					"match": "(?:(\\.)|(::))\\s*(\\$*[a-zA-Z_$][\\w$]*)(?=\\s*\\??(\\.\\s*[a-zA-Z_$]\\w*|::))",
+					"captures": {
+						"1": {
+							"name": "punctuation.separator.property.period.myfirstPlugin"
+						},
+						"2": {
+							"name": "keyword.operator.prototype.myfirstPlugin"
+						},
+						"3": {
+							"name": "variable.other.object.property.myfirstPlugin"
+						}
+					}
+				},
+				{
+					"match": "(?:(\\.)|(::))\\s*([A-Z][A-Z0-9_$]*\\b\\$*)",
+					"captures": {
+						"1": {
+							"name": "punctuation.separator.property.period.myfirstPlugin"
+						},
+						"2": {
+							"name": "keyword.operator.prototype.myfirstPlugin"
+						},
+						"3": {
+							"name": "constant.other.property.myfirstPlugin"
+						}
+					}
+				},
+				{
+					"match": "(?:(\\.)|(::))\\s*(\\$*[a-zA-Z_$][\\w$]*)",
+					"captures": {
+						"1": {
+							"name": "punctuation.separator.property.period.myfirstPlugin"
+						},
+						"2": {
+							"name": "keyword.operator.prototype.myfirstPlugin"
+						},
+						"3": {
+							"name": "variable.other.property.myfirstPlugin"
+						}
+					}
+				},
+				{
+					"match": "(?:(\\.)|(::))\\s*([0-9][\\w$]*)",
+					"captures": {
+						"1": {
+							"name": "punctuation.separator.property.period.myfirstPlugin"
+						},
+						"2": {
+							"name": "keyword.operator.prototype.myfirstPlugin"
+						},
+						"3": {
+							"name": "invalid.illegal.identifier.myfirstPlugin"
+						}
+					}
+				}
+			]
+		}
+	}
+}

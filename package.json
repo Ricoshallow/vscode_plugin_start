@@ -32,7 +32,7 @@
 			"editor/context": [
 				{
 					"command": "start-vscode.gettime",
-					"when": "myfirstPlugin"
+					"when": "resourceLangId == myfirstPlugin"
 				}
 			]
 		},
@@ -44,9 +44,26 @@
 					".foo"
 				],
 				"aliases": [
-
+					"myfirstPlugin"
 				],
 				"configuration": "./language-configuration.json"
+			}
+		],
+		"grammars": [
+			{
+				"language": "myfirstPlugin",
+				"scopeName": "source.myfirstPlugin",
+				"path": "./syntaxes/myfirstPlugin.tmLanguage.json"
+			}
+		],
+		"snippets": [
+			{
+				"language": "myfirstPlugin",
+				"path": "./snippets/dolphindb.snippets.json"
+			},
+			{
+				"language": "myfirstPlugin",
+				"path": "snippets/dolphindb-functions.snippets.json"
 			}
 		]
 	},
